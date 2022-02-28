@@ -8267,6 +8267,14 @@ function wrappy (fn, cb) {
 
 /***/ }),
 
+/***/ 2359:
+/***/ ((module) => {
+
+module.exports = eval("require")("./findUnused");
+
+
+/***/ }),
+
 /***/ 2877:
 /***/ ((module) => {
 
@@ -8426,7 +8434,11 @@ var __webpack_exports__ = {};
 var core = __nccwpck_require__(2186);
 // EXTERNAL MODULE: ./node_modules/@actions/github/lib/github.js
 var github = __nccwpck_require__(5438);
+// EXTERNAL MODULE: ./node_modules/@vercel/ncc/dist/ncc/@@notfound.js?./findUnused
+var _notfoundfindUnused = __nccwpck_require__(2359);
 ;// CONCATENATED MODULE: ./src/action.js
+
+
 
 
 
@@ -8434,9 +8446,6 @@ async function run() {
   core.info(`
   *** ACTION RUN - START ***
   `)
-  // get all the repo secrets
-  // check what secrets are used in the workflows
-  // log error for unused secrets
 
   const githubToken = core.getInput('github-token', { required: true })
   const octokit = github.getOctokit(githubToken)
@@ -8448,17 +8457,10 @@ async function run() {
       repo
     })
 
-    const unusedSecrets = []
-    secrets.forEach(secret => {
-      if (github.context.workflow.includes(secret.name)) {
-        unusedSecrets.push(secret.name)
-      }
-    })
+    const unusedSecrets = await (0,_notfoundfindUnused.findUnused)(secrets)
 
     if (unusedSecrets.length) {
-      core.setFailed(`
-      Unused secrets detected: ${unusedSecrets.join(', ')}
-      `)
+      core.setFailed(`Unused secrets detected: ${unusedSecrets.join(', ')}`)
     }
   } catch (err) {
     core.setFailed(`Action failed with error ${err}`)
