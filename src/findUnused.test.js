@@ -10,7 +10,7 @@ afterEach(() => {
 })
 
 describe('findUnused', () => {
-  it('Returns an array with unused secrets', async () => {
+  it('Returns empty array if no unused secrets', async () => {
     getExecOutput.mockImplementation(async () => ({
       exitCode: 0,
       stdout: 'dummy output',
@@ -18,7 +18,7 @@ describe('findUnused', () => {
     }))
     expect(await findUnused(dummySecrets)).toEqual([])
   })
-  it('Returns empty array if no unused secrets', async () => {
+  it('Returns an array with unused secrets', async () => {
     getExecOutput.mockImplementation(async () => ({
       exitCode: 1,
       stdout: '',
