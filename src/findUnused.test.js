@@ -19,6 +19,15 @@ describe('findUnused', () => {
     }))
     expect(await findUnused(secrets)).toEqual([])
   })
+  it('Returns empty array if some os the secrets are unused', async () => {
+    getExecOutput.mockImplementation(async () => ({
+      exitCode: 0,
+      stdout:
+        ' .github/workflows/dummy.yml: github-token: ${{ secrets.DUMMY_FOO }}',
+      stderr: ''
+    }))
+    expect(await findUnused(secrets)).toEqual(['DUMMY_BAR'])
+  })
   it('Returns an array with unused secrets', async () => {
     getExecOutput.mockImplementation(async () => ({
       exitCode: 1,
