@@ -2,20 +2,18 @@ import { getExecOutput } from '@actions/exec'
 import { setFailed } from '@actions/core'
 
 export async function findUnused(secrets) {
-  try {
-    return secrets.reduce(async (unusedPromise, secret) => {
-      const unused = await unusedPromise
-      const execOutput = await getExecOutput(
-        `grep -r ${secret.name} .github/workflows`,
-        [],
-        { silent: true, ignoreReturnCode: true }
-      )
+  const secretNames = secrets.map(secret => secret.name)
 
-      if (!execOutput.stdout) {
-        return [...unused, secret.name]
-      }
-      return unused
-    }, Promise.resolve([]))
+  try {
+    const executionOutput = await getExecOutput(
+      `egrep -r ${secretNames.join('|')} .github/workflows`,
+      [],
+      { silent: true, ignoreReturnCode: true }
+    )
+
+    return secretNames.filter(
+      secret => !executionOutput.stdout.includes(secret)
+    )
   } catch (err) {
     setFailed(`Searching for secrets failed with: ${err}`)
   }

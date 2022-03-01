@@ -1,7 +1,7 @@
 import { getExecOutput } from '@actions/exec'
 import { findUnused } from './findUnused'
 
-const dummySecrets = [{ name: 'DUMMY_FOO' }, { name: 'DUMMY_BAR' }]
+const secrets = [{ name: 'DUMMY_FOO' }, { name: 'DUMMY_BAR' }]
 
 jest.mock('@actions/exec')
 
@@ -13,17 +13,18 @@ describe('findUnused', () => {
   it('Returns empty array if no unused secrets', async () => {
     getExecOutput.mockImplementation(async () => ({
       exitCode: 0,
-      stdout: 'dummy output',
+      stdout:
+        ' .github/workflows/dummy.yml: github-token: ${{ secrets.DUMMY_FOO }} .github/workflows/test.yml:  github-token: ${{secrets.DUMMY_BAR}}',
       stderr: ''
     }))
-    expect(await findUnused(dummySecrets)).toEqual([])
+    expect(await findUnused(secrets)).toEqual([])
   })
   it('Returns an array with unused secrets', async () => {
     getExecOutput.mockImplementation(async () => ({
       exitCode: 1,
       stdout: '',
-      stderr: 'dummy error'
+      stderr: 'error'
     }))
-    expect(await findUnused(dummySecrets)).toEqual(['DUMMY_FOO', 'DUMMY_BAR'])
+    expect(await findUnused(secrets)).toEqual(['DUMMY_FOO', 'DUMMY_BAR'])
   })
 })
