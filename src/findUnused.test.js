@@ -19,7 +19,7 @@ describe('findUnused', () => {
     }))
     expect(await findUnused(secrets)).toEqual([])
   })
-  it('Returns empty array if some os the secrets are unused', async () => {
+  it('Returns empty array if some of the secrets are unused', async () => {
     getExecOutput.mockImplementation(async () => ({
       exitCode: 0,
       stdout:
