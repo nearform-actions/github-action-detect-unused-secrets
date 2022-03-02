@@ -12,10 +12,6 @@ on:
           - patch
           - minor
           - major
-      commit-message:
-        description: 'The commit message template'
-        required: false
-        default: 'release: {version}'
   pull_request:
     types: [closed]
 
@@ -32,7 +28,7 @@ jobs:
         with:
           github-token: ${{ secrets.github_token }}
           semver: ${{ github.event.inputs.semver }}
-          commit-message: ${{ github.event.inputs.commit-message }}
+          commit-message: 'chore: release {version}'
           sync-semver-tags: true
           build-command: |
             echo 'installing husky hooks..'
