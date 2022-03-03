@@ -1,7 +1,8 @@
-import * as core from '@actions/core'
-import { findUnused } from './findUnused'
+'use strict'
+const core = require('@actions/core')
 
-import { run } from './action'
+const { findUnused } = require('./findUnused')
+const { run } = require('./action')
 
 jest.mock('@actions/core', () => ({
   getInput: jest.fn(),

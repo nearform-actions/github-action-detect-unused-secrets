@@ -1,5 +1,7 @@
-import { getExecOutput } from '@actions/exec'
-import { findUnused } from './findUnused'
+'use strict'
+const exec = require('@actions/exec')
+
+const { findUnused } = require('./findUnused')
 
 const secrets = [{ name: 'DUMMY_FOO' }, { name: 'DUMMY_BAR' }]
 
@@ -11,7 +13,7 @@ afterEach(() => {
 
 describe('findUnused', () => {
   it('Returns empty array if no unused secrets', async () => {
-    getExecOutput.mockImplementation(async () => ({
+    exec.getExecOutput.mockImplementation(async () => ({
       exitCode: 0,
       stdout:
         ' .github/workflows/dummy.yml: github-token: ${{ secrets.DUMMY_FOO }} .github/workflows/test.yml:  github-token: ${{secrets.DUMMY_BAR}}',
@@ -20,7 +22,7 @@ describe('findUnused', () => {
     expect(await findUnused(secrets)).toEqual([])
   })
   it('Returns empty array if some of the secrets are unused', async () => {
-    getExecOutput.mockImplementation(async () => ({
+    exec.getExecOutput.mockImplementation(async () => ({
       exitCode: 0,
       stdout:
         ' .github/workflows/dummy.yml: github-token: ${{ secrets.DUMMY_FOO }}',
@@ -29,7 +31,7 @@ describe('findUnused', () => {
     expect(await findUnused(secrets)).toEqual(['DUMMY_BAR'])
   })
   it('Returns an array with unused secrets', async () => {
-    getExecOutput.mockImplementation(async () => ({
+    exec.getExecOutput.mockImplementation(async () => ({
       exitCode: 1,
       stdout: '',
       stderr: 'error'

@@ -1,11 +1,12 @@
-import { getExecOutput } from '@actions/exec'
-import { setFailed } from '@actions/core'
+'use strict'
+const exec = require('@actions/exec')
+const core = require('@actions/core')
 
-export async function findUnused(secrets) {
+async function findUnused(secrets) {
   const secretNames = secrets.map(secret => secret.name)
 
   try {
-    const executionOutput = await getExecOutput(
+    const executionOutput = await exec.getExecOutput(
       `egrep -r ${secretNames.join('|')} .github/workflows`,
       [],
       { silent: true, ignoreReturnCode: true }
@@ -15,6 +16,10 @@ export async function findUnused(secrets) {
       secret => !executionOutput.stdout.includes(secret)
     )
   } catch (err) {
-    setFailed(`Searching for secrets failed with: ${err}`)
+    core.setFailed(`Searching for secrets failed with: ${err}`)
   }
+}
+
+module.exports = {
+  findUnused
 }

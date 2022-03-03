@@ -9566,6 +9566,85 @@ function wrappy (fn, cb) {
 
 /***/ }),
 
+/***/ 3348:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+"use strict";
+
+const core = __nccwpck_require__(2186)
+const github = __nccwpck_require__(5438)
+
+const { findUnused } = __nccwpck_require__(5564)
+
+async function run() {
+  core.info(`
+  *** ACTION RUN - START ***
+  `)
+
+  const githubToken = core.getInput('github-token', { required: true })
+  const octokit = github.getOctokit(githubToken)
+  const { owner, repo } = github.context.repo
+
+  try {
+    const { secrets } = await octokit.rest.actions.listRepoSecrets({
+      owner,
+      repo
+    })
+
+    const unusedSecrets = await findUnused(secrets)
+
+    if (unusedSecrets.length) {
+      core.setFailed(`Unused secrets detected: ${unusedSecrets.join(', ')}`)
+    }
+  } catch (err) {
+    core.setFailed(`Action failed with error ${err}`)
+  } finally {
+    core.info(`
+    *** ACTION RUN - END ***
+    `)
+  }
+}
+
+module.exports = {
+  run
+}
+
+
+/***/ }),
+
+/***/ 5564:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+"use strict";
+
+const exec = __nccwpck_require__(1514)
+const core = __nccwpck_require__(2186)
+
+async function findUnused(secrets) {
+  const secretNames = secrets.map(secret => secret.name)
+
+  try {
+    const executionOutput = await exec.getExecOutput(
+      `egrep -r ${secretNames.join('|')} .github/workflows`,
+      [],
+      { silent: true, ignoreReturnCode: true }
+    )
+
+    return secretNames.filter(
+      secret => !executionOutput.stdout.includes(secret)
+    )
+  } catch (err) {
+    core.setFailed(`Searching for secrets failed with: ${err}`)
+  }
+}
+
+module.exports = {
+  findUnused
+}
+
+
+/***/ }),
+
 /***/ 2877:
 /***/ ((module) => {
 
@@ -9751,17 +9830,6 @@ module.exports = JSON.parse('[[[0,44],"disallowed_STD3_valid"],[[45,46],"valid"]
 /******/ 	}
 /******/ 	
 /************************************************************************/
-/******/ 	/* webpack/runtime/make namespace object */
-/******/ 	(() => {
-/******/ 		// define __esModule on exports
-/******/ 		__nccwpck_require__.r = (exports) => {
-/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
-/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
-/******/ 			}
-/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
-/******/ 		};
-/******/ 	})();
-/******/ 	
 /******/ 	/* webpack/runtime/compat */
 /******/ 	
 /******/ 	if (typeof __nccwpck_require__ !== 'undefined') __nccwpck_require__.ab = __dirname + "/";
@@ -9771,76 +9839,10 @@ var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be in strict mode.
 (() => {
 "use strict";
-// ESM COMPAT FLAG
-__nccwpck_require__.r(__webpack_exports__);
 
-// EXTERNAL MODULE: ./node_modules/@actions/core/lib/core.js
-var core = __nccwpck_require__(2186);
-// EXTERNAL MODULE: ./node_modules/@actions/github/lib/github.js
-var github = __nccwpck_require__(5438);
-// EXTERNAL MODULE: ./node_modules/@actions/exec/lib/exec.js
-var exec = __nccwpck_require__(1514);
-;// CONCATENATED MODULE: ./src/findUnused.js
+const core = __nccwpck_require__(2186)
 
-
-
-async function findUnused(secrets) {
-  const secretNames = secrets.map(secret => secret.name)
-
-  try {
-    const executionOutput = await (0,exec.getExecOutput)(
-      `egrep -r ${secretNames.join('|')} .github/workflows`,
-      [],
-      { silent: true, ignoreReturnCode: true }
-    )
-
-    return secretNames.filter(
-      secret => !executionOutput.stdout.includes(secret)
-    )
-  } catch (err) {
-    (0,core.setFailed)(`Searching for secrets failed with: ${err}`)
-  }
-}
-
-;// CONCATENATED MODULE: ./src/action.js
-
-
-
-
-
-async function run() {
-  core.info(`
-  *** ACTION RUN - START ***
-  `)
-
-  const githubToken = core.getInput('github-token', { required: true })
-  const octokit = github.getOctokit(githubToken)
-  const { owner, repo } = github.context.repo
-
-  try {
-    const { secrets } = await octokit.rest.actions.listRepoSecrets({
-      owner,
-      repo
-    })
-
-    const unusedSecrets = await findUnused(secrets)
-
-    if (unusedSecrets.length) {
-      core.setFailed(`Unused secrets detected: ${unusedSecrets.join(', ')}`)
-    }
-  } catch (err) {
-    core.setFailed(`Action failed with error ${err}`)
-  } finally {
-    core.info(`
-    *** ACTION RUN - END ***
-    `)
-  }
-}
-
-;// CONCATENATED MODULE: ./src/index.js
-
-
-
+const { run } = __nccwpck_require__(3348)
 
 run().catch(error => core.setFailed(error))
 

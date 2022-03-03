@@ -1,9 +1,10 @@
-import * as core from '@actions/core'
-import * as github from '@actions/github'
+'use strict'
+const core = require('@actions/core')
+const github = require('@actions/github')
 
-import { findUnused } from './findUnused'
+const { findUnused } = require('./findUnused')
 
-export async function run() {
+async function run() {
   core.info(`
   *** ACTION RUN - START ***
   `)
@@ -30,4 +31,8 @@ export async function run() {
     *** ACTION RUN - END ***
     `)
   }
+}
+
+module.exports = {
+  run
 }
