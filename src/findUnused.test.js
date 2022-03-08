@@ -21,7 +21,7 @@ describe('findUnused', () => {
     }))
     expect(await findUnused(secrets)).toEqual([])
   })
-  it('Returns empty array if some of the secrets are unused', async () => {
+  it('Returns an array of unused secrets, when some are missing', async () => {
     exec.getExecOutput.mockImplementation(async () => ({
       exitCode: 0,
       stdout:
@@ -30,7 +30,7 @@ describe('findUnused', () => {
     }))
     expect(await findUnused(secrets)).toEqual(['DUMMY_BAR'])
   })
-  it('Returns an array with unused secrets', async () => {
+  it('Returns an array of unused secrets, when all are missing', async () => {
     exec.getExecOutput.mockImplementation(async () => ({
       exitCode: 1,
       stdout: '',
