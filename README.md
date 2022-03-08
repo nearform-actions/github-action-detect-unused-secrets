@@ -8,7 +8,7 @@ GitHub Action that detects unused secrets.
 You need to install a github app to your repo and save the **APP_ID** and the **PRIVATE_KEY** to your secrets.
 The `tibdex/github-app-token@v1` and `actions/checkout@v3` are required to run this action
 
-```yml:
+```yml
  name: detect-unused-secrets
 
 on:
