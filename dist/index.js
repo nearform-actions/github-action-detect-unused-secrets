@@ -9586,12 +9586,12 @@ async function run() {
   const { owner, repo } = github.context.repo
 
   try {
-    const { secrets } = await octokit.rest.actions.listRepoSecrets({
+    const { data } = await octokit.rest.actions.listRepoSecrets({
       owner,
       repo
     })
 
-    const unusedSecrets = await findUnused(secrets)
+    const unusedSecrets = await findUnused(data.secrets)
 
     if (unusedSecrets.length) {
       core.setFailed(`Unused secrets detected: ${unusedSecrets.join(', ')}`)
@@ -9619,15 +9619,20 @@ module.exports = {
 
 const exec = __nccwpck_require__(1514)
 const core = __nccwpck_require__(2186)
+const path = __nccwpck_require__(1017)
 
 async function findUnused(secrets) {
   const secretNames = secrets.map(secret => secret.name)
 
   try {
     const executionOutput = await exec.getExecOutput(
-      `egrep -r ${secretNames.join('|')} .github/workflows`,
+      `egrep -r ${secretNames.join('|')} ./`,
       [],
-      { silent: true, ignoreReturnCode: true }
+      {
+        silent: true,
+        ignoreReturnCode: true,
+        cwd: path.join(process.env.GITHUB_WORKSPACE, '.github', 'workflows')
+      }
     )
 
     return secretNames.filter(

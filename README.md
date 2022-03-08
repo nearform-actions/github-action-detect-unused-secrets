@@ -13,6 +13,8 @@ jobs:
   setup:
     runs-on: ubuntu-latest
     steps:
+      - name: Give access to repo workspace
+        uses: actions/checkout@v3
       - name: Detect unused secrets
         uses: nearform/github-action-detect-unused-secrets@v1
         with:
@@ -22,6 +24,10 @@ jobs:
 ## Usage
 
 Configure this action in your workflows providing the inputs described below.
+
+### actions/checkout@v3
+
+**Required** This action checks-out your repository under $GITHUB_WORKSPACE, so the detect-unused-secrets workflow can access it. For more information check [actions/checkout](https://github.com/actions/checkout)
 
 ### `github-token`
 

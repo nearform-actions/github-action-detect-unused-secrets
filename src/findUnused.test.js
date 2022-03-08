@@ -1,8 +1,8 @@
 'use strict'
 const exec = require('@actions/exec')
-
 const { findUnused } = require('./findUnused')
 
+process.env.GITHUB_WORKSPACE = './'
 const secrets = [{ name: 'DUMMY_FOO' }, { name: 'DUMMY_BAR' }]
 
 jest.mock('@actions/exec')
