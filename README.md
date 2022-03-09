@@ -1,5 +1,7 @@
 # github-action-detect-unused-secrets
 
+[![unused-secrets](https://github.com/nearform/github-action-detect-unused-secrets/actions/workflows/detect-unused-secrets.yml/badge.svg)](https://github.com/nearform/github-action-detect-unused-secrets/actions/workflows/detect-unused-secrets.yml)
+
 GitHub Action that detects unused secrets.
 Checks which secrets are used in workflows with those defined in the repository settings.
 **This action does NOT get access to the values of secrets, only their names.**
@@ -42,7 +44,7 @@ jobs:
 
 Configure this action in your workflows providing the inputs described below.
 
-### Install a GitHub App
+### Create and Install a GitHub App
 
 **Required** [Create a GitHub App](https://docs.github.com/en/developers/apps/building-github-apps/creating-a-github-app) within your organisation with permission to `secrets: read-only` and [install](https://docs.github.com/en/developers/apps/managing-github-apps/installing-github-apps#installing-your-private-github-app-on-your-repository) it on the repo where you want to use this action. Save the `APP_ID` and generated `PRIVATE_KEY` to the secrets under your organisation or repo.
 
