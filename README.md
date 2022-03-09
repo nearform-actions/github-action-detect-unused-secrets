@@ -48,7 +48,7 @@ Configure this action in your workflows providing the inputs described below.
 
 This action uses the [listRepoSecrets endpoint](https://docs.github.com/en/rest/reference/actions#list-repository-secrets), your GitHub App must have the `secrets` repository permission to use this endpoint.
 
-> Note that you can skip this step if you use a [personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token) `with repo scope` and reference it as github-token
+> Note that you can skip this step if you use a [personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token) with `repo` scope and reference it as github-token
 
 ### uses: tibdex/github-app-token@v1
 
@@ -66,7 +66,7 @@ The default `secrets.GITHUB_TOKEN` has limited permissions [click here for more 
     private_key: ${{ secrets.PRIVATE_KEY }}
 ```
 
-> Note that you can skip this step if you use a [personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token) `with repo scope` and reference it as github-token
+> Note that you can skip this step if you use a [personal access token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token) with `repo` scope and reference it as github-token
 
 ### uses: actions/checkout@v3
 
