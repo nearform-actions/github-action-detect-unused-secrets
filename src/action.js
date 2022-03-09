@@ -1,9 +1,10 @@
-import * as core from '@actions/core'
-import * as github from '@actions/github'
+'use strict'
+const core = require('@actions/core')
+const github = require('@actions/github')
 
-import { findUnused } from './findUnused'
+const { findUnused } = require('./findUnused')
 
-export async function run() {
+async function run() {
   core.info(`
   *** ACTION RUN - START ***
   `)
@@ -13,12 +14,12 @@ export async function run() {
   const { owner, repo } = github.context.repo
 
   try {
-    const { secrets } = await octokit.rest.actions.listRepoSecrets({
+    const { data } = await octokit.rest.actions.listRepoSecrets({
       owner,
       repo
     })
 
-    const unusedSecrets = await findUnused(secrets)
+    const unusedSecrets = await findUnused(data.secrets)
 
     if (unusedSecrets.length) {
       core.setFailed(`Unused secrets detected: ${unusedSecrets.join(', ')}`)
@@ -30,4 +31,8 @@ export async function run() {
     *** ACTION RUN - END ***
     `)
   }
+}
+
+module.exports = {
+  run
 }
