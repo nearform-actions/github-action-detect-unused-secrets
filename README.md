@@ -35,8 +35,6 @@ jobs:
         uses: actions/checkout@v3
       - name: Detect unused secrets
         uses: nearform/github-action-detect-unused-secrets@v1
-        with:
-          github-token: ${{ steps.generate_token.outputs.token }}
 
 ```
 
@@ -76,6 +74,6 @@ The default `secrets.GITHUB_TOKEN` has limited permissions [click here for more 
 
 ### `github-token`
 
-**Required** [The generated token](#uses-tibdexgithub-app-tokenv1) or your personal access token with repo scope.
+_Optional_ [The generated token](#uses-tibdexgithub-app-tokenv1) or your personal access token with repo scope.
 
 > Note that the default `secrets.GITHUB_TOKEN` does not have the required permissions, you need to either use a generated token or a personal access token with repo scope.
