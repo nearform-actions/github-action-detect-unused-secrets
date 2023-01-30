@@ -1,10 +1,14 @@
 'use strict'
 const core = require('@actions/core')
 const github = require('@actions/github')
+const toolkit = require('actions-toolkit')
 
 const { findUnused } = require('./findUnused')
 
 async function run() {
+  toolkit.logActionRefWarning()
+  toolkit.logRepoWarning()
+
   core.info(`
   *** ACTION RUN - START ***
   `)

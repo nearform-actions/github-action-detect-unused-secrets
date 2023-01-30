@@ -26,6 +26,7 @@ jest.mock('@actions/github', () => ({
 jest.mock('./findUnused.js', () => ({
   findUnused: jest.fn()
 }))
+jest.mock('actions-toolkit')
 
 afterEach(() => {
   jest.clearAllMocks()
