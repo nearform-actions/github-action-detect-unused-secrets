@@ -17,6 +17,9 @@ on:
 
 jobs:
   release:
+    permissions:
+      pull-requests: write
+      contents: write
     runs-on: ubuntu-latest
     steps:
       - name: Node.js runtime on build
@@ -24,7 +27,7 @@ jobs:
         with:
           node-version: 16
 
-      - uses: nearform/optic-release-automation-action@v4
+      - uses: nearform-actions/optic-release-automation-action@v4
         with:
           semver: ${{ github.event.inputs.semver }}
           commit-message: 'chore: release {version}'
@@ -32,3 +35,4 @@ jobs:
           build-command: |
             echo 'installing husky hooks..'
             npm ci
+
