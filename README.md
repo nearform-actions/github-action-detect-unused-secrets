@@ -1,6 +1,6 @@
 # github-action-detect-unused-secrets
 
-[![unused-secrets](https://github.com/nearform/github-action-detect-unused-secrets/actions/workflows/detect-unused-secrets.yml/badge.svg)](https://github.com/nearform/github-action-detect-unused-secrets/actions/workflows/detect-unused-secrets.yml)
+[![unused-secrets](https://github.com/nearform-actions/github-action-detect-unused-secrets/actions/workflows/detect-unused-secrets.yml/badge.svg)](https://github.com/nearform-actions/github-action-detect-unused-secrets/actions/workflows/detect-unused-secrets.yml)
 
 GitHub Action that detects unused secrets.
 Checks which secrets are used in workflows with those defined in the repository settings.
@@ -34,9 +34,9 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
       - name: Detect unused secrets
-        uses: nearform/github-action-detect-unused-secrets@v1
+        uses: nearform-actions/github-action-detect-unused-secrets@v1
         with:
-          github-token: ${{ steps.generate_token.outputs.token }}        
+          github-token: ${{ steps.generate_token.outputs.token }}
 ```
 
 ## Usage
