@@ -35,7 +35,8 @@ jobs:
         uses: actions/checkout@v3
       - name: Detect unused secrets
         uses: nearform/github-action-detect-unused-secrets@v1
-
+        with:
+          github-token: ${{ steps.generate_token.outputs.token }}        
 ```
 
 ## Usage
