@@ -1,6 +1,6 @@
 {
   "name": "github-action-detect-unused-secrets",
-  "version": "1.0.37",
+  "version": "1.0.38",
   "description": "Detect unused github secrets",
   "main": "dist/index.js",
   "scripts": {
